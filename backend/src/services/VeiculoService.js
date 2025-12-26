@@ -22,6 +22,7 @@ function validarStatus(status) {
   }
 }
 
+//Função para administrador do sistema, cadastrar veículos 
 export function criarVeiculos({ modelo, categoria, preco_diaria, status = 'DISPONIVEL' }) {
   validarTexto('modelo', modelo);
   validarTexto('categoria', categoria);
@@ -36,4 +37,19 @@ export function criarVeiculos({ modelo, categoria, preco_diaria, status = 'DISPO
     status
   });
 }
+
+//Função para administrador do sistema , pode buscar todos veículos, mas tambem pode buscar por caracteríticas 
+export function listarAdmin({ categoria, precoMax, status } = {}) {
+  if (status) validarStatus(status);
+  return VeiculoRepository.listarVeiculos({ categoria, precoMax, status });
+}
+
+//Função para usuários, filtra características mas somente os disponíveis  
+export function listarDisponiveis({ categoria, precoMax } = {}) {
+  return VeiculoRepository.listarDisponiveis({ categoria, precoMax });
+}
+
+
+
+
 
