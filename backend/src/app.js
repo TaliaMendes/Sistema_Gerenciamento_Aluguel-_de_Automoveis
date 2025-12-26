@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 
 import { initModels } from './models/initModels.js'
-import veiculoRoutes from './routes/veiculo.routes.js';
+import veiculoRoutes from './routes/Veiculo.routes.js';
 
 const app = express();
 app.use(express.json());
