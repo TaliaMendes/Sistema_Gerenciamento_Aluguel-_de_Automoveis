@@ -27,3 +27,17 @@ export function listarDisponiveis(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function atualizar(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+   
+    const veiculo = VeiculoService.atualizarVeiculo(id, req.body);
+    if (!veiculo) {
+      return next(createError(404, 'Veículo não encontrado.'));
+    }
+    res.status(201).json({ id });
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}
