@@ -45,3 +45,24 @@ export function listarVeiculos({ categoria, precoMax, status } = {}) {
 export function listarDisponiveis({ categoria, precoMax } = {}) {
   return listarVeiculos({ categoria, precoMax, status: 'DISPONIVEL' });
 }
+
+//Editar dados do veículo
+export function atualizarVeiculo(id, {modelo, categoria, preco_diaria}){
+  const veiculo = buscarVeiculoPorId(id);
+
+  if(!veiculo) return false; 
+
+  const novoModelo = modelo ?? veiculo.modelo;
+  const novaCategoria = categoria ?? veiculo.categoria;
+  const novoPreco = preco_diaria ?? veiculo.preco_diaria;
+
+  const info = db.prepare(`
+    UPDATE veiculos 
+    SET modelo = ?, categoria = ?, preco_diaria = ?
+    WHERE id = ?
+  `) .run(novoModelo, novaCategoria, novoPreco, id);
+
+  return info.changes > 0;
+}
+
+
