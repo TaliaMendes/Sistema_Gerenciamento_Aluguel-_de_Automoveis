@@ -9,3 +9,21 @@ export function criar (req, res){
     next(createHttpError(400, err.message));
   }
 }
+
+export function listarVeiculosAdm(req, res, next) {
+  try {
+    const data = VeiculoService.listarAdmin(req.query);
+    res.json(data);
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}
+
+export function listarDisponiveis(req, res, next) {
+  try {
+    const data = VeiculoService.listarDisponiveis(req.query);
+    res.json(data);
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}
