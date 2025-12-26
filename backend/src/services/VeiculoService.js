@@ -49,6 +49,30 @@ export function listarDisponiveis({ categoria, precoMax } = {}) {
   return VeiculoRepository.listarDisponiveis({ categoria, precoMax });
 }
 
+//Função para administrador do sistema, editar dados do veículo
+export function atualizarVeiculo(id, { modelo, categoria, preco_diaria }) {
+
+  if (!Number.isInteger(id)) throw new Error('ID inválido.');
+
+  const veiculo = VeiculoRepository.buscarVeiculoPorId(id);
+  if (!veiculo) throw new Error('Veículo não encontrado.');
+
+  // valida os parametros passados 
+  if (modelo !== undefined) validarTexto('modelo', modelo);
+  if (categoria !== undefined) validarTexto('categoria', categoria);
+
+  let preco;
+  if (preco_diaria !== undefined) preco = validarPreco(preco_diaria);
+
+  const ok = VeiculoRepository.atualizarVeiculo(id, {
+    modelo: modelo?.trim(),
+    categoria: categoria?.trim(),
+    preco_diaria: preco
+  });
+
+  return ok;
+}
+
 
 
 
