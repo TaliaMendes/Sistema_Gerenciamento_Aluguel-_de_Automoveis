@@ -41,3 +41,14 @@ export function atualizar(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function inativar(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+
+    VeiculoService.inativarVeiculo(id);
+    res.status(201).json({ id });
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

@@ -65,4 +65,15 @@ export function atualizarVeiculo(id, {modelo, categoria, preco_diaria}){
   return info.changes > 0;
 }
 
+export function inativarVeiculo(id) {
+  
+  const status = 'INATIVO'; 
 
+  const info = db.prepare(`
+    UPDATE veiculos 
+    SET status = ?
+    WHERE id = ?
+  `) .run(status, id);
+
+  return info.changes > 0;
+}

@@ -73,7 +73,18 @@ export function atualizarVeiculo(id, { modelo, categoria, preco_diaria }) {
   return ok;
 }
 
+// Função para administrador do sistema, inativar  veículo para uso
+export function inativarVeiculo(id) {
 
+  if (!Number.isInteger(id)) throw new Error('ID inválido.');
 
+  const veiculo = VeiculoRepository.buscarVeiculoPorId(id);
+  if (!veiculo) throw new Error('Veículo não encontrado.');
 
+  // não vai inativar se o veiculo estiver locado 
+  if (veiculo.status === 'LOCADO') {
+    throw new Error('Não é possível inativar um veículo locado.');
+  }
 
+  return VeiculoRepository.inativarVeiculo(id);
+}
