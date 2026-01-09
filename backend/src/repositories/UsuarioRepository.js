@@ -13,3 +13,7 @@ export function criarUsuario({ nome, email, senha_hash, tipo = 'CLIENTE' }) {
   const info = usuario.run(nome, email, senha_hash, tipo);
   return info.lastInsertRowid;
 }
+
+export function buscarPorId(id) {
+  return db.prepare('SELECT id, nome, email, tipo FROM usuarios WHERE id = ?').get(id);
+}
