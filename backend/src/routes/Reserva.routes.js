@@ -5,5 +5,6 @@ const router = Router();
 
 router.post('/runcar/reservas', ReservaController.criarReserva);
 router.get('/runcar/reservas/usuarios', ReservaController.listarReservasUsuarios);
+router.post('/runcar/reservas/:id/pagamento', ReservaController.pagarReservas);
 
 export default router;
