@@ -12,6 +12,7 @@ export function createReservaTable() {
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
 
       pagamento_status TEXT NOT NULL CHECK(pagamento_status IN ('PENDENTE','PAGO','CANCELADO')) DEFAULT 'PENDENTE',
+      pagamento_metodo TEXT,
       pagamento_valor REAL DEFAULT 0,
       pagamento_em TEXT,
 
