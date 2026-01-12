@@ -98,3 +98,21 @@ export function pagarReserva(reserva_id, { metodo }) {
 
   return true;
 }
+
+export function cancelarReserva(reserva_id) {
+  const reservaId = validarId('reserva_id', reserva_id);
+
+  const reserva = ReservaRepository.buscarPorId(reservaId);
+  if (!reserva) throw new Error('Reserva não encontrada.');
+  if (reserva.status !== 'RESERVADA') throw new Error('Reserva não realizada, não é possível realizar o cancelamento.');
+
+  const ok = ReservaRepository.cancelarReserva(reservaId);
+  if (!ok) throw new Error('Falha ao cancelar reserva.');
+
+  //Deixa o veículo disponível novamente
+  if (reserva.pagamento_status === 'PAGO') {
+    ReservaRepository.atualizarStatusVeiculo(reserva.veiculo_id, 'DISPONIVEL');
+  }
+
+  return true;
+}
