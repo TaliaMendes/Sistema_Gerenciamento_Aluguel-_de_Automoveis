@@ -82,14 +82,17 @@ export function listarReservasUsuario(usuario_id, { status } = {}) {
 
 export function pagarReserva(reserva_id, { metodo }) {
   const reservaId = validarId('reserva_id', reserva_id);
-  validarMetodoPagamento(metodo);
+  const validarMetodo = validarMetodoPagamento(metodo);
 
   const reserva = ReservaRepository.buscarPorId(reservaId);
   if (!reserva) throw new Error('Reserva não encontrada.');
   if (reserva.status !== 'RESERVADA') throw new Error('Não é possível realizar o pagamento pois não há reservas.');
   if (reserva.pagamento_status === 'PAGO') throw new Error('Pagamento da reserva já realizado.');
 
-  const confirmaPagamento = ReservaRepository.confirmarPagamento(reservaId, reserva.pagamento_valor);
+  const confirmaPagamento = ReservaRepository.confirmarPagamento(reservaId, {
+    metodo: validarMetodo,
+    valor: reserva.pagamento_valor
+  });
 
   if (!confirmaPagamento) throw new Error('Falha ao confirmar pagamento.');
 

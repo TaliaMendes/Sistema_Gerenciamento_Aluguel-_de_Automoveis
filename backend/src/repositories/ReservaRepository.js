@@ -56,15 +56,16 @@ export function buscarPorId(id) {
   return db.prepare('SELECT * FROM reservas WHERE id = ?').get(id);
 }
 
-export function confirmarPagamento(reserva_id,  valor ) {
+export function confirmarPagamento(reserva_id,  { metodo, valor } ) {
   const pagamento = db.prepare(`
     UPDATE reservas
     SET pagamento_status = 'PAGO',
+        pagamento_metodo = ?,
         pagamento_valor = ?,
         pagamento_em = datetime('now')
     WHERE id = ?
       AND status = 'RESERVADA'
-  `).run(valor, reserva_id);
+  `).run(metodo, valor, reserva_id);
 
   return pagamento.changes > 0;
 }
