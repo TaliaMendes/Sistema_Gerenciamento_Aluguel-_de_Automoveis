@@ -1,6 +1,8 @@
 import * as ReservaRepository from '../repositories/ReservaRepository.js';
 import * as VeiculoRepository from '../repositories/VeiculoRepository.js';
 
+const METODOS_VALIDOS = new Set(['PIX', 'CREDITO', 'DEBITO']);
+
 function validarId(nome, id) {
   const n = Number(id);
   if (!Number.isInteger(n) || n <= 0) throw new Error(`${nome} inválido.`);
@@ -32,6 +34,13 @@ function diasReserva(dataInicio, dataFim) {
   const diffMs = end.getTime() - start.getTime();
   const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   return diffDias + 1; 
+}
+
+function validarMetodoPagamento(metodo) {
+  if (!METODOS_VALIDOS.has(metodo)) {
+    throw new Error(`Forma de pagamento inválido. Use: ${Array.from(METODOS_VALIDOS).join(', ')}`);
+  }
+  return metodo;
 }
 
 export function criarReserva({ usuario_id, veiculo_id, data_inicio, data_fim }) {
@@ -69,4 +78,23 @@ export function criarReserva({ usuario_id, veiculo_id, data_inicio, data_fim }) 
 export function listarReservasUsuario(usuario_id, { status } = {}) {
   const usuarioId = validarId('usuario_id', usuario_id);
   return ReservaRepository.listarPorUsuario(usuarioId, { status });
+}
+
+export function pagarReserva(reserva_id, { metodo }) {
+  const reservaId = validarId('reserva_id', reserva_id);
+  validarMetodoPagamento(metodo);
+
+  const reserva = ReservaRepository.buscarPorId(reservaId);
+  if (!reserva) throw new Error('Reserva não encontrada.');
+  if (reserva.status !== 'RESERVADA') throw new Error('Não é possível realizar o pagamento pois não há reservas.');
+  if (reserva.pagamento_status === 'PAGO') throw new Error('Pagamento da reserva já realizado.');
+
+  const confirmaPagamento = ReservaRepository.confirmarPagamento(reservaId, reserva.pagamento_valor);
+
+  if (!confirmaPagamento) throw new Error('Falha ao confirmar pagamento.');
+
+  //Ao pagar, seta o veículo como LOCADO
+  ReservaRepository.atualizarStatusVeiculo(reserva.veiculo_id, 'LOCADO');
+
+  return true;
 }

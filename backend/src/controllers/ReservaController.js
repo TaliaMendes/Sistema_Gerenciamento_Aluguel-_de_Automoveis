@@ -19,3 +19,15 @@ export function listarReservasUsuarios(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function pagarReservas(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) throw new Error('reserva_id inválido.');
+
+    ReservaService.pagarReserva(id, req.body);
+    res.json({ ok: true });
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

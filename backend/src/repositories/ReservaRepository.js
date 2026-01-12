@@ -51,3 +51,30 @@ export function listarPorUsuario(usuario_id, { status } = {}) {
 
   return db.prepare(sql).all(...params);
 }
+
+export function buscarPorId(id) {
+  return db.prepare('SELECT * FROM reservas WHERE id = ?').get(id);
+}
+
+export function confirmarPagamento(reserva_id,  valor ) {
+  const pagamento = db.prepare(`
+    UPDATE reservas
+    SET pagamento_status = 'PAGO',
+        pagamento_valor = ?,
+        pagamento_em = datetime('now')
+    WHERE id = ?
+      AND status = 'RESERVADA'
+  `).run(valor, reserva_id);
+
+  return pagamento.changes > 0;
+}
+
+export function atualizarStatusVeiculo(id, status) {
+  const atualizaStatus = db.prepare(`
+    UPDATE veiculos
+    SET status = ?
+    WHERE id = ?
+  `).run(status, id);
+
+  return atualizaStatus.changes > 0;
+}
