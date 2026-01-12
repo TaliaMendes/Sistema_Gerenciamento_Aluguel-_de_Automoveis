@@ -65,3 +65,8 @@ export function criarReserva({ usuario_id, veiculo_id, data_inicio, data_fim }) 
 
   return { reservaId, valorTotal, dias };
 }
+
+export function listarReservasUsuario(usuario_id, { status } = {}) {
+  const usuarioId = validarId('usuario_id', usuario_id);
+  return ReservaRepository.listarPorUsuario(usuarioId, { status });
+}

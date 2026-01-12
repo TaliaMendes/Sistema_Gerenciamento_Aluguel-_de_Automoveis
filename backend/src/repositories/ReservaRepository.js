@@ -33,3 +33,21 @@ export function reservaConflito(veiculo_id, data_inicio, data_fim) {
 
   return !!reserva;
 }
+
+export function listarPorUsuario(usuario_id, { status } = {}) {
+  let sql = `
+    SELECT *
+    FROM reservas
+    WHERE usuario_id = ?
+  `;
+  const params = [usuario_id];
+
+  if (status) {
+    sql += ' AND status = ?';
+    params.push(status);
+  }
+
+  sql += ' ORDER BY created_at DESC';
+
+  return db.prepare(sql).all(...params);
+}
