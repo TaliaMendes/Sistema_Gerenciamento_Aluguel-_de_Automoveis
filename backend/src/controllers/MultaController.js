@@ -9,3 +9,13 @@ export function registrarMulta(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function listarPorReserva(req, res, next) {
+  try {
+    const reservaId = req.params.reservaId;
+    const data = MultaService.listarMultasPorReserva(reservaId);
+    res.json(data);
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

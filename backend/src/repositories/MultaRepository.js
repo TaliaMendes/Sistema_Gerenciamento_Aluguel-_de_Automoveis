@@ -12,3 +12,12 @@ export function criarMulta({ reserva_id, descricao, valor }) {
 export function buscarPorId(id) {
   return db.prepare('SELECT * FROM multas WHERE id = ?').get(id);
 }
+
+export function listarPorReserva(reserva_id) {
+  return db.prepare(`
+    SELECT *
+    FROM multas
+    WHERE reserva_id = ?
+    ORDER BY created_at DESC
+  `).all(reserva_id);
+}
