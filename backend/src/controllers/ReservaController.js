@@ -43,3 +43,15 @@ export function cancelarReservas(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function finalizarReservas(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) throw new Error('reserva_id inválido.');
+
+    ReservaService.finalizarReserva(id);
+    res.json({ ok: true });
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

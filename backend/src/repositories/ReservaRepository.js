@@ -93,3 +93,14 @@ export function cancelarReserva(reserva_id) {
 
   return info.changes > 0;
 }
+
+export function finalizarReserva(reserva_id) {
+  const info = db.prepare(`
+    UPDATE reservas
+    SET status = 'FINALIZADA'
+    WHERE id = ?
+      AND status = 'RESERVADA'
+  `).run(reserva_id);
+
+  return info.changes > 0;
+}
