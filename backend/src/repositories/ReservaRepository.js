@@ -78,3 +78,18 @@ export function atualizarStatusVeiculo(id, status) {
 
   return atualizaStatus.changes > 0;
 }
+
+export function cancelarReserva(reserva_id) {
+  const info = db.prepare(`
+    UPDATE reservas
+    SET status = 'CANCELADA',
+        pagamento_status = CASE
+          WHEN pagamento_status = 'PAGO' THEN pagamento_status
+          ELSE 'CANCELADO'
+        END
+    WHERE id = ?
+      AND status = 'RESERVADA'
+  `).run(reserva_id);
+
+  return info.changes > 0;
+}
