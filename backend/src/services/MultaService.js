@@ -53,3 +53,16 @@ export function listarMultasPorUsuario(usuario_id) {
   const usuarioId = validarId('usuario_id', usuario_id);
   return MultaRepository.listarPorUsuario(usuarioId);
 }
+
+// ADMIN: remover multa
+export function removerMulta(id) {
+  const multaId = validarId('multa_id', id);
+
+  const multa = MultaRepository.buscarPorId(multaId);
+  if (!multa) throw new Error('Multa não encontrada.');
+
+  const multaRemovida = MultaRepository.removerMulta(multaId);
+  if (!multaRemovida) throw new Error('Falha ao remover multa.');
+
+  return true;
+}

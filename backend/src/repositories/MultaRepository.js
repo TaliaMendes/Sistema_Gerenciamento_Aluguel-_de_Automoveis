@@ -31,3 +31,8 @@ export function listarPorUsuario(usuario_id) {
     ORDER BY m.created_at DESC
   `).all(usuario_id);
 }
+
+export function removerMulta(id) {
+  const info = db.prepare('DELETE FROM multas WHERE id = ?').run(id);
+  return info.changes > 0;
+}

@@ -29,3 +29,13 @@ export function listarPorUsuario(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function remover(req, res, next) {
+  try {
+    const { id } = req.params;
+    MultaService.removerMulta(id);
+    res.json({ ok: true });
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}
