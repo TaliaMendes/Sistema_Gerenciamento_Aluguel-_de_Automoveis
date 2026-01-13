@@ -105,3 +105,17 @@ export function finalizarReserva(reserva_id) {
 
   return info.changes > 0;
 }
+
+export function buscarDetalhes(reserva_id) {
+  return db.prepare(`
+    SELECT
+      r.*,
+      v.modelo AS veiculo_modelo,
+      v.categoria AS veiculo_categoria,
+      v.preco_diaria AS veiculo_preco_diaria,
+      v.status AS veiculo_status
+    FROM reservas r
+    JOIN veiculos v ON v.id = r.veiculo_id
+    WHERE r.id = ?
+  `).get(reserva_id);
+}

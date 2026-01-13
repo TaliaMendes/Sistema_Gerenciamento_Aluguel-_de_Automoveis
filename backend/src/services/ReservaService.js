@@ -1,5 +1,6 @@
 import * as ReservaRepository from '../repositories/ReservaRepository.js';
 import * as VeiculoRepository from '../repositories/VeiculoRepository.js';
+import * as MultaRepository from '../repositories/MultaRepository.js'
 
 const METODOS_VALIDOS = new Set(['PIX', 'CREDITO', 'DEBITO']);
 
@@ -134,4 +135,56 @@ export function finalizarReserva(reserva_id) {
 
   ReservaRepository.atualizarStatusVeiculo(reserva.veiculo_id, 'DISPONIVEL');
   return true;
+}
+
+export function obterDetalhesReserva(reserva_id, usuario_id) {
+  const reservaId = validarId('reserva_id', reserva_id);
+
+  // Busca reserva + dados do veículo 
+  const detalhes = ReservaRepository.buscarDetalhes(reservaId);
+  if (!detalhes) throw new Error('Reserva não encontrada.');
+
+  // Validar usuário
+  if (usuario_id !== undefined && usuario_id !== null && usuario_id !== '') {
+    const usuarioId = validarId('usuario_id', usuario_id);
+    if (detalhes.usuario_id !== usuarioId) {
+      throw new Error('Reserva não pertence ao usuário informado.');
+    }
+  }
+
+  const multas = MultaRepository.listarPorReserva(reservaId);
+
+  const totalMultas = multas.reduce((acc, m) => acc + Number(m.valor || 0), 0);
+  const valorReserva = Number(detalhes.pagamento_valor || 0);
+
+  return {
+    reserva: {
+      id: detalhes.id,
+      usuario_id: detalhes.usuario_id,
+      veiculo_id: detalhes.veiculo_id,
+      data_inicio: detalhes.data_inicio,
+      data_fim: detalhes.data_fim,
+      status: detalhes.status,
+      created_at: detalhes.created_at,
+      pagamento: {
+        status: detalhes.pagamento_status,
+        metodo: detalhes.pagamento_metodo,
+        valor: valorReserva,
+        em: detalhes.pagamento_em
+      }
+    },
+    veiculo: {
+      id: detalhes.veiculo_id,
+      modelo: detalhes.veiculo_modelo,
+      categoria: detalhes.veiculo_categoria,
+      preco_diaria: Number(detalhes.veiculo_preco_diaria || 0),
+      status: detalhes.veiculo_status
+    },
+    multas,
+    resumo: {
+      valor_reserva: valorReserva,
+      total_multas: totalMultas,
+      total_geral: valorReserva + totalMultas
+    }
+  };
 }
