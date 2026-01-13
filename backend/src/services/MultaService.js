@@ -42,8 +42,14 @@ export function registrarMulta({ reserva_id, descricao, valor }) {
 export function listarMultasPorReserva(reserva_id) {
   const reservaId = validarId('reserva_id', reserva_id);
 
-  const reserva = MultaRepository.buscarPorId(reservaId);
+  const reserva = ReservaRepository.buscarPorId(reservaId);
   if (!reserva) throw new Error('Reserva não encontrada.');
 
   return MultaRepository.listarPorReserva(reservaId);
+}
+
+// Listar todas as multas do usuário
+export function listarMultasPorUsuario(usuario_id) {
+  const usuarioId = validarId('usuario_id', usuario_id);
+  return MultaRepository.listarPorUsuario(usuarioId);
 }
