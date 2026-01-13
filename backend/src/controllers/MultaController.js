@@ -19,3 +19,13 @@ export function listarPorReserva(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function listarPorUsuario(req, res, next) {
+  try {
+    const usuario_id  = req.params.usuario_id;
+    const data = MultaService.listarMultasPorUsuario(usuario_id);
+    res.json(data);
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

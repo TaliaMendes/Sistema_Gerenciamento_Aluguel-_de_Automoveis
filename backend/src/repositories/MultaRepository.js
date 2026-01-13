@@ -21,3 +21,13 @@ export function listarPorReserva(reserva_id) {
     ORDER BY created_at DESC
   `).all(reserva_id);
 }
+
+export function listarPorUsuario(usuario_id) {
+  return db.prepare(`
+    SELECT m.*
+    FROM multas m
+    JOIN reservas r ON r.id = m.reserva_id
+    WHERE r.usuario_id = ?
+    ORDER BY m.created_at DESC
+  `).all(usuario_id);
+}
