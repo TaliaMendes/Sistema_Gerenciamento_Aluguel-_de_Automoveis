@@ -55,3 +55,15 @@ export function finalizarReservas(req, res, next) {
     next(createHttpError(400, err.message));
   }
 }
+
+export function detalhes(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { usuario_id } = req.query;
+
+    const data = ReservaService.obterDetalhesReserva(id, usuario_id);
+    res.json(data);
+  } catch (err) {
+    next(createHttpError(400, err.message));
+  }
+}

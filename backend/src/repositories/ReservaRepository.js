@@ -56,15 +56,16 @@ export function buscarPorId(id) {
   return db.prepare('SELECT * FROM reservas WHERE id = ?').get(id);
 }
 
-export function confirmarPagamento(reserva_id,  valor ) {
+export function confirmarPagamento(reserva_id,  { metodo, valor } ) {
   const pagamento = db.prepare(`
     UPDATE reservas
     SET pagamento_status = 'PAGO',
+        pagamento_metodo = ?,
         pagamento_valor = ?,
         pagamento_em = datetime('now')
     WHERE id = ?
       AND status = 'RESERVADA'
-  `).run(valor, reserva_id);
+  `).run(metodo, valor, reserva_id);
 
   return pagamento.changes > 0;
 }
@@ -103,4 +104,18 @@ export function finalizarReserva(reserva_id) {
   `).run(reserva_id);
 
   return info.changes > 0;
+}
+
+export function buscarDetalhes(reserva_id) {
+  return db.prepare(`
+    SELECT
+      r.*,
+      v.modelo AS veiculo_modelo,
+      v.categoria AS veiculo_categoria,
+      v.preco_diaria AS veiculo_preco_diaria,
+      v.status AS veiculo_status
+    FROM reservas r
+    JOIN veiculos v ON v.id = r.veiculo_id
+    WHERE r.id = ?
+  `).get(reserva_id);
 }
