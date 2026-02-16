@@ -9,6 +9,7 @@ import multasRoutes from './routes/Multa.routes.js';
 
 const app = express();
 app.use(express.json());
+app.use(cors()); //vai utilizar para permitir acessar as rotas 
 
 initModels();
 console.log('Banco inicializado e tabelas criadas.');
