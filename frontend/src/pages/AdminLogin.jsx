@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {  Link } from 'react-router-dom';
+import {  useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Auth.css';
 
@@ -8,6 +8,7 @@ export function AdminLogin() {
   const [password, setPassword] = useState('');
   
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { loginAdmin } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -24,7 +25,8 @@ export function AdminLogin() {
       });
 
       if (response.ok) {
-        alert('Login de administrador bem-sucedido!');
+        
+        navigate('/admin/dashboard');
       } else if (response.status === 401 || response.status === 403) {
         alert('Credenciais de administrador inválidas. Acesso negado.');
       } else {
