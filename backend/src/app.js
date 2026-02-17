@@ -6,6 +6,7 @@ import veiculoRoutes from './routes/Veiculo.routes.js';
 import usuarioRoutes from './routes/Usuario.routes.js';
 import reservasRoutes from './routes/Reserva.routes.js';
 import multasRoutes from './routes/Multa.routes.js';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
