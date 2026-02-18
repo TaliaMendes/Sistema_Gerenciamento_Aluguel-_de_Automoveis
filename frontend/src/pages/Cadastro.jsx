@@ -17,7 +17,7 @@ export function Cadastro() {
 
     try {
       await cadastrar(nome, email, senha);
-      navigate('/login');
+      navigate('/veiculos');
     } catch (err) {
       console.log(err);
       alert('Erro ao cadastrar. Tente novamente.');

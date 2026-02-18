@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {  Link } from 'react-router-dom';
+import {  useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Auth.css';
 
@@ -7,6 +7,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -15,7 +16,7 @@ export function Login() {
 
     try {
       await login(email, senha);
-      alert('Login bem-sucedido!');
+      navigate('/veiculos');
     } catch (err) {
       console.log(err);
       alert('Erro ao fazer login. Verifique suas credenciais.');
