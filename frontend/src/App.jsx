@@ -10,6 +10,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminVeiculoForm } from './pages/AdminVeiculoForm';
 import { AdminMultas } from './pages/AdminMultas';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { Home } from './pages/Home';
 import './App.css'
 
 function App() {
@@ -21,18 +22,10 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/admin" element={<AdminLogin />} />
 
-          <Route path="/admin" element={<AdminLogin />} />
 
-
-          <Route
-            path="/veiculos"
-            element={
-              <ProtectedRoute>
-                <Veiculos />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/veiculos" element={<Veiculos />} />
 
           <Route
             path="/reservar/:veiculoId"
@@ -88,8 +81,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

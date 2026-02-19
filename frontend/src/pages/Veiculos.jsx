@@ -8,7 +8,7 @@ export function Veiculos() {
   const [veiculos, setVeiculos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtros, setFiltros] = useState({ categoria: '', precoMax: '' });
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,13 +50,22 @@ export function Veiculos() {
       <header className="veiculos-header">
         <h1>RunCar - Veículos Disponíveis</h1>
         <div className="user-info">
-          <span>Olá, {user?.nome}!</span>
-          <Link to="/minhas-reservas" className="btn-secondary">
-            Minhas Reservas
-          </Link>
-          <button onClick={handleLogout} className="btn-logout">
-            Sair
-          </button>
+          {isAuthenticated ? (
+            <>
+              <span>Olá, {user?.nome}!</span>
+              <Link to="/minhas-reservas" className="btn-secondary">
+                Minhas Reservas
+              </Link>
+              <button onClick={handleLogout} className="btn-logout">
+                Sair
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn-secondary">Entrar</Link>
+              <Link to="/cadastro" className="btn-reservar">Cadastrar</Link>
+            </>
+          )}
         </div>
       </header>
 
@@ -110,12 +119,18 @@ export function Veiculos() {
                   {veiculo.status}
                 </span>
                 <button
-                  onClick={() => navigate(`/reservar/${veiculo.id}`)}
-                  className="btn-reservar"
-                  disabled={veiculo.status !== 'DISPONIVEL'}
-                >
-                  Reservar
-                </button>
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate(`/reservar/${veiculo.id}`);
+                  } else {
+                    navigate('/login', { state: { from: `/reservar/${veiculo.id}` } });
+                  }
+                }}
+                className="btn-reservar"
+                disabled={veiculo.status !== 'DISPONIVEL'}
+              >
+                Reservar
+              </button>
               </div>
             ))
           )}
