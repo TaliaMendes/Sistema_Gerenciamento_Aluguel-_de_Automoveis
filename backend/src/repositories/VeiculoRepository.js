@@ -1,13 +1,11 @@
 import { db } from '../database/database.js';
 
-//Inserir um novo veículo no banco 
-export function criarVeiculo({ modelo, categoria, preco_diaria, status = 'DISPONIVEL' }) {
+export function criarVeiculo({ modelo, categoria, preco_diaria, status = 'DISPONIVEL', imagem_url = null }) {
   const insertVeiculo = db.prepare(`
-    INSERT INTO veiculos (modelo, categoria, preco_diaria, status)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO veiculos (modelo, categoria, preco_diaria, status, imagem_url)
+    VALUES (?, ?, ?, ?, ?)
   `);
-
-  const veiculo = insertVeiculo.run(modelo, categoria, preco_diaria, status);
+  const veiculo = insertVeiculo.run(modelo, categoria, preco_diaria, status, imagem_url);
   return veiculo.lastInsertRowid;
 }
 
@@ -47,7 +45,7 @@ export function listarDisponiveis({ categoria, precoMax } = {}) {
 }
 
 //Editar dados do veículo
-export function atualizarVeiculo(id, {modelo, categoria, preco_diaria}){
+export function atualizarVeiculo(id, { modelo, categoria, preco_diaria, imagem_url }) {
   const veiculo = buscarVeiculoPorId(id);
 
   if(!veiculo) return false; 
@@ -55,12 +53,13 @@ export function atualizarVeiculo(id, {modelo, categoria, preco_diaria}){
   const novoModelo = modelo ?? veiculo.modelo;
   const novaCategoria = categoria ?? veiculo.categoria;
   const novoPreco = preco_diaria ?? veiculo.preco_diaria;
+  const novaImagem = imagem_url !== undefined ? imagem_url : veiculo.imagem_url;
 
   const info = db.prepare(`
     UPDATE veiculos 
-    SET modelo = ?, categoria = ?, preco_diaria = ?
+    SET modelo = ?, categoria = ?, preco_diaria = ?, imagem_url = ?
     WHERE id = ?
-  `) .run(novoModelo, novaCategoria, novoPreco, id);
+  `).run(novoModelo, novaCategoria, novoPreco, novaImagem, id);
 
   return info.changes > 0;
 }

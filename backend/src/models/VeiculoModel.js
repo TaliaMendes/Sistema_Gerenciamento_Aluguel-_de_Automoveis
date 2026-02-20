@@ -7,7 +7,9 @@ export function createVeiculoTable() {
       modelo TEXT NOT NULL,
       categoria TEXT NOT NULL,
       preco_diaria REAL NOT NULL,
-      status TEXT NOT NULL CHECK(status IN ('DISPONIVEL','LOCADO','INATIVO')) DEFAULT 'DISPONIVEL'
+      status TEXT NOT NULL CHECK(status IN ('DISPONIVEL','LOCADO','INATIVO')) DEFAULT 'DISPONIVEL',
+      imagem_url TEXT DEFAULT NULL
+
     );
   `);
 }

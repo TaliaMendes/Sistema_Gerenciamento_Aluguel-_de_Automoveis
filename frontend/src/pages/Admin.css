@@ -434,3 +434,73 @@
   display: flex;
   gap: 12px;
 }
+.imagem-origem-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.toggle-btn {
+  padding: 8px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #f7f7f7;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn:hover {
+  border-color: #bbb;
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+.file-input {
+  padding: 8px;
+  font-size: 13px;
+}
+.imagem-preview {
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #eee;
+  max-width: 320px;
+  position: relative;
+}
+
+.imagem-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.btn-remover-imagem {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-remover-imagem:hover {
+  background: rgba(220, 38, 38, 0.8);
+}
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 12px;
+}

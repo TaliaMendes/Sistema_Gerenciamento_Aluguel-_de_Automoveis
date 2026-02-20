@@ -4,6 +4,8 @@ import { veiculoService } from '../services/veiculoService';
 import { useAuth } from '../contexts/AuthContext';
 import './Admin.css';
 
+const API_BASE = 'http://localhost:3000';
+
 export function AdminVeiculoForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,7 +17,11 @@ export function AdminVeiculoForm() {
     categoria: '',
     preco_diaria: '',
     status: 'DISPONIVEL',
+    imagem_url: '',
   });
+  const [imagemArquivo, setImagemArquivo] = useState(null);
+  const [imagemPreview, setImagemPreview] = useState(null);
+  const [imagemOrigem, setImagemOrigem] = useState('arquivo'); 
   const [loading, setLoading] = useState(isEdit);
   const [submitting, setSubmitting] = useState(false);
 
@@ -30,6 +36,14 @@ export function AdminVeiculoForm() {
     }
   }, [id, adminCredentials]);
 
+  useEffect(() => {
+    return () => {
+      if (imagemPreview && imagemPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(imagemPreview);
+      }
+    };
+  }, [imagemPreview]);
+
   const carregarVeiculo = async () => {
     try {
       const veiculos = await veiculoService.listarTodos();
@@ -40,7 +54,15 @@ export function AdminVeiculoForm() {
           categoria: veiculo.categoria,
           preco_diaria: veiculo.preco_diaria,
           status: veiculo.status,
+          imagem_url: veiculo.imagem_url || '',
         });
+        if (veiculo.imagem_url) {
+          const src = veiculo.imagem_url.startsWith('/')
+            ? `${API_BASE}${veiculo.imagem_url}`
+            : veiculo.imagem_url;
+          setImagemPreview(src);
+          setImagemOrigem(veiculo.imagem_url.startsWith('/') ? 'arquivo' : 'url');
+        }
       } else {
         alert('Veículo não encontrado.');
       }
@@ -62,9 +84,17 @@ export function AdminVeiculoForm() {
 
     try {
       const data = {
-        ...formData,
+        modelo: formData.modelo,
+        categoria: formData.categoria,
         preco_diaria: Number(formData.preco_diaria),
+        status: formData.status,
       };
+
+      if (imagemOrigem === 'arquivo' && imagemArquivo) {
+        data.imagem = imagemArquivo;
+      } else if (imagemOrigem === 'url' && formData.imagem_url.trim()) {
+        data.imagem_url = formData.imagem_url.trim();
+      }
 
       if (isEdit) {
         await veiculoService.atualizar(id, data);
@@ -82,6 +112,21 @@ export function AdminVeiculoForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setImagemArquivo(file);
+    const previewUrl = URL.createObjectURL(file);
+    setImagemPreview(previewUrl);
+  };
+
+  const handleRemoverImagem = () => {
+    setImagemArquivo(null);
+    setImagemPreview(null);
+    setFormData((prev) => ({ ...prev, imagem_url: '' }));
   };
 
   const handleLogout = () => {
@@ -164,6 +209,69 @@ export function AdminVeiculoForm() {
                 step="0.01"
                 placeholder="Ex: 150.00"
               />
+            </div>
+
+            <div className="form-group">
+              <label>Imagem do Veículo</label>
+
+              <div className="imagem-origem-toggle">
+                <button
+                  type="button"
+                  className={`toggle-btn ${imagemOrigem === 'arquivo' ? 'active' : ''}`}
+                  onClick={() => setImagemOrigem('arquivo')}
+                >
+                  📁 Enviar arquivo
+                </button>
+                <button
+                  type="button"
+                  className={`toggle-btn ${imagemOrigem === 'url' ? 'active' : ''}`}
+                  onClick={() => setImagemOrigem('url')}
+                >
+                  🔗 Colar URL
+                </button>
+              </div>
+
+              {imagemOrigem === 'arquivo' ? (
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleFileChange}
+                  className="file-input"
+                />
+              ) : (
+                <input
+                  type="url"
+                  name="imagem_url"
+                  value={formData.imagem_url}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setImagemPreview(e.target.value);
+                  }}
+                  placeholder="https://exemplo.com/imagem.jpg"
+                />
+              )}
+
+              <small className="form-hint">
+                Formatos aceitos: JPG, PNG, WebP, GIF (máx. 5 MB)
+              </small>
+
+              {imagemPreview && (
+                <div className="imagem-preview">
+                  <img
+                    src={imagemPreview}
+                    alt="Preview do veículo"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                    onLoad={(e) => { e.target.style.display = 'block'; }}
+                  />
+                  <button
+                    type="button"
+                    className="btn-remover-imagem"
+                    onClick={handleRemoverImagem}
+                  >
+                    ✕ Remover
+                  </button>
+                </div>
+              )}
             </div>
 
             {!isEdit && (

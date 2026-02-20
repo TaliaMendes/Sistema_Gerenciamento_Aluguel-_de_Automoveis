@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { veiculoService } from "../services/veiculoService";
 import { useAuth } from "../contexts/AuthContext";
+import { resolverImagemUrl } from "../utils/imageUtils";
 import "./Home.css";
 
 export function Home() {
@@ -113,10 +114,27 @@ export function Home() {
               <div className="home-veiculos-grid">
                 {veiculos.map((veiculo) => (
                   <div key={veiculo.id} className="home-veiculo-card">
-                    <div className="home-veiculo-icon" aria-hidden="true">🚗</div>
+                    <div className="home-veiculo-img">
+                      {veiculo.imagem_url ? (
+                        <img
+                          src={resolverImagemUrl(veiculo.imagem_url)}
+                          alt={veiculo.modelo}
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className="home-veiculo-img-fallback"
+                        style={{ display: veiculo.imagem_url ? 'none' : 'flex' }}
+                      >
+                        🚗
+                      </div>
+                      <span className="home-veiculo-categoria">{veiculo.categoria}</span>
+                    </div>
                     <div className="home-veiculo-info">
                       <h4>{veiculo.modelo}</h4>
-                      <span className="home-veiculo-categoria">{veiculo.categoria}</span>
                     </div>
                     <div className="home-veiculo-bottom">
                       <span className="home-veiculo-preco">
@@ -174,7 +192,6 @@ export function Home() {
               </div>
             </div>
           </section>
-
           <section className="home-cta">
             <h3>Pronto para sua próxima aventura?</h3>
             <p>Crie sua conta e aproveite a melhor experiência de locação.</p>

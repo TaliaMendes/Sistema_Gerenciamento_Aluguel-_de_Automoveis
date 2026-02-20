@@ -22,8 +22,7 @@ function validarStatus(status) {
   }
 }
 
-//Função para administrador do sistema, cadastrar veículos 
-export function criarVeiculos({ modelo, categoria, preco_diaria, status = 'DISPONIVEL' }) {
+export function criarVeiculos({ modelo, categoria, preco_diaria, status = 'DISPONIVEL', imagem_url = null }) {
   validarTexto('modelo', modelo);
   validarTexto('categoria', categoria);
 
@@ -34,7 +33,8 @@ export function criarVeiculos({ modelo, categoria, preco_diaria, status = 'DISPO
     modelo: modelo.trim(),
     categoria: categoria.trim(),
     preco_diaria: preco,
-    status
+    status,
+    imagem_url: imagem_url?.trim() || null,
   });
 }
 
@@ -50,7 +50,7 @@ export function listarDisponiveis({ categoria, precoMax } = {}) {
 }
 
 //Função para administrador do sistema, editar dados do veículo
-export function atualizarVeiculo(id, { modelo, categoria, preco_diaria }) {
+export function atualizarVeiculo(id, { modelo, categoria, preco_diaria, imagem_url }) {
 
   if (!Number.isInteger(id)) throw new Error('ID inválido.');
 
@@ -67,13 +67,13 @@ export function atualizarVeiculo(id, { modelo, categoria, preco_diaria }) {
   const ok = VeiculoRepository.atualizarVeiculo(id, {
     modelo: modelo?.trim(),
     categoria: categoria?.trim(),
-    preco_diaria: preco
+    preco_diaria: preco,
+    imagem_url: imagem_url !== undefined ? (imagem_url?.trim() || null) : undefined,
   });
 
   return ok;
 }
 
-// Função para administrador do sistema, inativar  veículo para uso
 export function inativarVeiculo(id) {
 
   if (!Number.isInteger(id)) throw new Error('ID inválido.');
@@ -81,7 +81,6 @@ export function inativarVeiculo(id) {
   const veiculo = VeiculoRepository.buscarVeiculoPorId(id);
   if (!veiculo) throw new Error('Veículo não encontrado.');
 
-  // não vai inativar se o veiculo estiver locado 
   if (veiculo.status === 'LOCADO') {
     throw new Error('Não é possível inativar um veículo locado.');
   }
