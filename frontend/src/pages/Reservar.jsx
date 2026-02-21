@@ -74,7 +74,7 @@ export function Reservar() {
       });
       navigate(`/pagamento/${result.reservaId}`);
     } catch (err) {
-      setErro(err.response?.data?.message || err.message || "Erro ao criar reserva");
+      setErro(err.response?.data?.erro || err.message || "Erro ao criar reserva");
     } finally {
       setSubmitting(false);
     }
