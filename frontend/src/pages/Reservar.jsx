@@ -15,6 +15,7 @@ export function Reservar() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [resumo, setResumo] = useState(null);
+  const [erro, setErro] = useState(null);
 
   useEffect(() => {
     carregarVeiculo();
@@ -62,6 +63,7 @@ export function Reservar() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    setErro(null);
 
     try {
       const result = await reservaService.criar({
@@ -72,7 +74,7 @@ export function Reservar() {
       });
       navigate(`/pagamento/${result.reservaId}`);
     } catch (err) {
-      console.log('Erro ao criar reserva:', err);
+      setErro(err.response?.data?.message || err.message || "Erro ao criar reserva");
     } finally {
       setSubmitting(false);
     }
@@ -109,6 +111,7 @@ export function Reservar() {
         <p>Preço: {formatarPreco(veiculo.preco_diaria)}/dia</p>
       </div>
 
+      {erro && <p className="erro-msg">{erro}</p>}
 
       <form onSubmit={handleSubmit} className="reserva-form">
         <div className="form-row">

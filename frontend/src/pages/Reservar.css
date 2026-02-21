@@ -9,6 +9,12 @@
   justify-content: center;
 }
 
+.erro-msg {
+  color: red;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
 .reservar-container h1 {
   text-align: center;
   color: #333;
