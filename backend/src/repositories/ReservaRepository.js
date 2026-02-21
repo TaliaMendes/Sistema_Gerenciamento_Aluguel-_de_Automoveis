@@ -36,8 +36,8 @@ export function reservaConflito(veiculo_id, data_inicio, data_fim) {
 
 export function listarPorUsuario(usuario_id, { status } = {}) {
   let sql = `
-    SELECT *
-    FROM reservas
+    SELECT v.modelo , r.id, r.usuario_id , r.veiculo_id, r.data_inicio, r.data_fim, r.status, r.pagamento_valor, r.pagamento_status, r.pagamento_metodo, r.pagamento_em 
+    FROM reservas r LEFT JOIN veiculos v ON r.veiculo_id = v.id
     WHERE usuario_id = ?
   `;
   const params = [usuario_id];

@@ -48,7 +48,7 @@ export function MinhasReservas() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const formatarPreco = (preco) => {
@@ -148,7 +148,7 @@ export function MinhasReservas() {
               <div className="reserva-details">
                 <div className="detail-row">
                   <span>Veículo:</span>
-                  <strong>{reserva.veiculo_modelo}</strong>
+                  <strong>{reserva.modelo}</strong>
                 </div>
                 <div className="detail-row">
                   <span>Período:</span>
