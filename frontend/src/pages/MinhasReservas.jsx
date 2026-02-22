@@ -200,7 +200,7 @@ export function MinhasReservas() {
                     </button>
                   )}
 
-                  {(reserva.data_inicio) > new Date() ? (
+                  {new Date(`${reserva.data_inicio}T00:00:00`) > new Date() ? (
                     <button
                       onClick={() => handleCancelar(reserva.id, reserva.pagamento_status)}
                       className="btn-danger btn-sm"
