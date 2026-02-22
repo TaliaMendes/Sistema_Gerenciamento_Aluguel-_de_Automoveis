@@ -1,62 +1,152 @@
-# CSI606-2025-01 - Remoto - Proposta de Trabalho Final
+# CSI606-2025-02 - Remoto - Trabalho Final - Resultados
 
 **Discente:** Talia de Fatima Mendes
 
 ## Resumo
+O presente trabalho consiste no desenvolvimento do sistema web de gerenciamento de aluguel de automóveis , **RunCar** 🚗 , uma aplicação full-stack para gerenciamento de locação de veículos. O sistema simula o funcionamento básico de uma locadora, permitindo que usuários consultem veículos disponíveis, realizem reservas, efetuem pagamento simulado e acompanhem multas associadas às locações.
 
-Este projeto apresenta o desenvolvimento de um sistema web para **gerenciamento de locação de veículos**, com foco em oferecer autonomia ao cliente e facilitar as operações básicas da locadora. A aplicação permite que visitantes consultem carros disponíveis, enquanto usuários cadastrados podem realizar reservas, efetuar um pagamento simulado, acompanhar suas locações, solicitar devoluções e visualizar multas.  O sistema também conta com um módulo administrativo, onde o administrador gerencia veículos, acompanha reservas e registra multas por atrasos ou ocorrências.
+O backend foi desenvolvido em Node.js com Express, utilizando arquitetura em camadas (Controller, Service e Repository) e banco de dados SQLite para persistência. O frontend foi desenvolvido em React + VITE, permitindo interação dinâmica com o sistema via API REST.
 
----
-
-## 1. Tema
-
-O trabalho final tem como tema o desenvolvimento de um **sistema web para gerenciamento de locação de veículos**. O projeto simula o funcionamento básico de uma locadora, permitindo que usuários pesquisem veículos disponíveis, realizem reservas, façam pagamento simulado e acompanhem suas locações. Além disso, inclui um módulo administrativo responsável por gerenciar a frota, acompanhar reservas e registrar multas. O objetivo do sistema é demonstrar a aplicação prática de conceitos de desenvolvimento web full-stack, organização de dados e controle de permissões entre diferentes perfis de usuário.
+O projeto buscou aplicar conceitos de desenvolvimento web, organização de código, controle de acesso, integração frontend-backend e persistência de dados.
 
 ---
 
-## 2. Escopo
-Este projeto terá as seguintes funcionalidades:
+## 1. Funcionalidades implementadas
+### 1.1 Gestão de Usuários
+- Cadastro de cliente
+- Login de cliente
+- Controle de perfil (cliente e administrador)
+- Autenticação administrativa via Basic Auth
+  
+### 1.2 Gestão de Veículos
+- Listagem pública de veículos disponíveis
+- Filtro por categoria e preço
+- Cadastro de veículos (administrador)
+- Edição de veículos (administrador)
+- Inativação de veículos (administrador)
+- Controle de status (DISPONIVEL / INDISPONIVEL)
 
-### 2.1 Para visitantes (usuário sem login):
-* Visualizar a lista de veículos disponíveis.
-* Consultar disponibilidade por período.
-* Filtrar veículos por categoria, preço. 
+### 1.3 Reservas
+- Criação de reserva associada a cliente
+- Validação de disponibilidade do veículo
+- Cancelamento de reserva
+- Finalização de reserva (devolução)
+- Endpoint de resumo detalhado da reserva contendo:
+- Dados do veículo
+- Dados da reserva
+- Pagamento
+- Multas
+- Cálculo do total geral da locação
 
-### 2.2 Para usuários cadastrados (cliente):
-* Criar conta e realizar login.
-* Realizar reservas de veículos.
-* Efetuar pagamento da reserva. 
-* Consultar reservas ativas e canceladas.
-* Solicitar cancelamento de reserva.
-* Realizar devolução do veículo.
-* Visualizar multas associadas às suas locações.
+### 1.4 Pagamento Simulado
+- Registro de pagamento
+- Escolha de método (PIX, Crédito, Débito, Simulado)
+- Alteração automática do status para PAGO
 
-### 2.3 Para administradores:
-* Gerenciar veículos (cadastrar, editar e inativar).
-* Confirmar devoluções realizadas pelos clientes.
-* Registrar multas e taxas por atraso ou ocorrências.
+### 1.5 Multas
+- Registro de multa por administrador
+- Associação de multa à reserva
+- Consulta de multas por reserva
+- Consulta de multas por usuário
+- Cálculo do total acumulado de multas
+
+### 1.6 Frontend
+- Interface web responsiva
+- Navegação com React Router
+- Tela pública de catálogo
+- Área do cliente
+- Tela de resumo detalhado de todas as reservas
+- Integração com API REST via Axios
+  
 ---
 
-## 3. Restrições
-Neste trabalho não serão considerados:
+## 2. Funcionalidades previstas e não implementadas
+### 2.1 Busca de veículos por modelo
+* Pesquisar um veículo pelo modelo. 
 
-* Integrações reais com gateways de pagamento (todas as transações serão apenas simuladas).
-* Integrações externas com órgãos oficiais, como DETRAN, para consulta de multas reais.
-* Processos complexos de manutenção de frota, vistorias avançadas ou controle de avarias detalhado.
-* Múltiplas filiais, logística real entre unidades ou controle geográfico de veículos.
-* Fluxos completos de contrato físico de locação; o sistema utiliza uma abordagem simplificada em que a reserva confirmada é tratada como locação ativa.
+### 2.2 Dashboard Administrativo Simples
+* Resumo com: Total de reservas ativas, Total faturado, Total de veículos alugados.
+  
+### 2.3 Alteração de Senha
+* Cliente e administradores realizarem a atualização da senha
+  
+---
+
+## 3. Outras funcionalidades implementadas
+### 3.1 Regra de Cancelamento de Reserva
+* O sistema permite o cancelamento da reserva mesmo após a realização do pagamento, desde que a solicitação seja feita antes da data de início da locação.
 
 ---
 
-## 4. Protótipo
+## 4. Principais desafios e dificuldades
+### 4.1 Desenvolvimento da Interface 
+* Um dos principais desafios enfrentados durante o desenvolvimento do projeto foi a construção do frontend. Como possuo pouca experiência nessa área, essa etapa se tornou mais desafiadora e exigiu um esforço maior de aprendizado e adaptação.
 
-Protótipos das principais páginas do sistema foram elaborados para definir a estrutura visual e o fluxo de navegação da aplicação. Os protótipos incluem:
+### 4.2 Manipulação de Datas e Cálculos
+* Foi necessário tratar corretamente períodos de locação e cálculo de valores totais, o que demandou mais tempo para desenvolver e pensar na lógica de solução.
 
-* Página inicial (lista de veículos e disponibilidade)
-* Tela de detalhes e reserva do veículo
-* Tela finalização e pagamento.
-* Tela de detalhes da reserva do cliente
-* Tela de administração de veículos (Admin)
-* Tela de registro de multas (Admin)
+### 4.3 Integração Frontend-Backend
+* A comunicação entre o React e a API exigiu atenção na padronização das rotas e no tratamento de erros.
 
+---
+
+## 5. Instruções para instalação e execução
+
+### 5.1 Backend
+1. No terminal acesse a pasta 'backend' 
+```sh
+cd backend
+```
+
+2. Instalar dependências:
+```sh
+npm install
+```
+
+3. Executar comando para popular o banco com as imagens
+```sh
+npm db:seed
+```
+
+4. Criar arquivo `.env`: <br>
+Crie um arquivo `.env` na raiz do projeto e cole o coteúdo do arquivo `.env.example` disponível no codigo. Ou se preferir, cole contúdo disponível abaixo:
+```sh
+  PORT=3000
+  DB_FILE=src/database/locadora.sqlite
+  ADMIN_USER=admin
+  ADMIN_PASS=admin123
+```
+
+5. Executar servidor:
+```sh
+npm run dev
+```
+
+### 5.2 Frontend
+Abra um novo terminal em paralelo ao terminal que está rodando o servidor e siga os passos a seguir: 
+
+1. Acessar a pasta frontend:
+```sh
+cd frontend
+```
+
+2. Instalar dependências:
+```sh
+npm install
+```
+
+3. Executar aplicação:
+```sh
+npm run dev
+``` 
+4. Abra a aplicação no navegador:
+```sh
+http://localhost:5173
+```
+
+## 6. Referências
+* Node.js Documentation – https://nodejs.org
+* Express Documentation – https://expressjs.com
+* React Documentation – https://react.dev
+* 
 ---
