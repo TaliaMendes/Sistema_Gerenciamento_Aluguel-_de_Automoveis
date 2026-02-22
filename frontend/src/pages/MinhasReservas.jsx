@@ -33,9 +33,6 @@ export function MinhasReservas() {
     }
   };
 
-
-  console.log(reservas);
-
   const handleCancelar = async (reservaId, pagamentoStatus) => {
   const msg = pagamentoStatus === 'PAGO'
     ? 'Esta reserva já foi paga. Deseja cancelar mesmo assim? O reembolso será processado.'
@@ -60,7 +57,7 @@ export function MinhasReservas() {
     if (!window.confirm('Deseja realmente finalizar esta locação?')) return;
 
     try {
-      await reservaService.finalizarReserva(reservaId); 
+      await reservaService.finalizar(reservaId); 
       carregarDados(); 
     } catch (err) {
       console.log('Erro ao finalizar reserva:', err);
