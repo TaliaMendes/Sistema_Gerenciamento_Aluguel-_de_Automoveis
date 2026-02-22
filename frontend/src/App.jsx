@@ -11,6 +11,7 @@ import { AdminVeiculoForm } from './pages/AdminVeiculoForm';
 import { AdminMultas } from './pages/AdminMultas';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Home } from './pages/Home';
+import { Pagamento } from './pages/Pagamento';
 import './App.css'
 
 function App() {
@@ -81,8 +82,17 @@ function App() {
               </ProtectedRoute>
             }
           />
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+
+          <Route
+            path="/pagamento/:reservaId"
+            element={
+              <ProtectedRoute>
+                <Pagamento />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </AuthProvider>
