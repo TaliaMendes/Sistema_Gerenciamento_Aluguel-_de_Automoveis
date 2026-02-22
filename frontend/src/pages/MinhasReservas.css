@@ -213,6 +213,18 @@
   color: white;
 }
 
+.btn-success {
+  padding: 8px 16px;
+  color: white;
+  background-color: #509953;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
 .btn-logout {
   padding: 10px 20px;
   background: #ff5252;

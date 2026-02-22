@@ -51,6 +51,16 @@ export function MinhasReservas() {
     navigate('/');
   };
 
+   const handleFinalizar = async (reservaId) => {
+    if (!window.confirm('Deseja realmente finalizar esta locação?')) return;
+
+    try {
+      await reservaService.finalizarReserva(reservaId); 
+      carregarDados(); 
+    } catch (err) {
+      console.log('Erro ao finalizar reserva:', err);
+    }
+  };
   const formatarPreco = (preco) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -174,22 +184,34 @@ export function MinhasReservas() {
                 )}
               </div>
 
-              {reserva.status === 'RESERVADA' && reserva.pagamento_status === 'PENDENTE' && (
-                <div className="reserva-actions">
+              {reserva.status === 'RESERVADA' && (
+              <div className="reserva-actions">
+                {reserva.pagamento_status === 'PENDENTE' && (
                   <button
                     onClick={() => navigate(`/pagamento/${reserva.id}`)}
                     className="btn-primary btn-sm"
                   >
                     Pagar
                   </button>
+                )}
+
+                <button
+                  onClick={() => handleCancelar(reserva.id)}
+                  className="btn-danger btn-sm"
+                >
+                  Cancelar
+                </button>
+
+                {reserva.pagamento_status === 'PAGO' && (
                   <button
-                    onClick={() => handleCancelar(reserva.id)}
-                    className="btn-danger btn-sm"
+                    onClick={() => handleFinalizar(reserva.id)}
+                    className="btn-success btn-sm"
                   >
-                    Cancelar
+                    Finalizar
                   </button>
-                </div>
-              )}
+                )}
+              </div>
+            )}
             </div>
           ))}
         </div>
