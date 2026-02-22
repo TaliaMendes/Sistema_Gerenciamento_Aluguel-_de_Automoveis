@@ -144,6 +144,18 @@ npm run dev
 http://localhost:5173
 ```
 
+## ⚠️ Observação
+
+O usuário administrador já é criado automaticamente ao iniciar a aplicação.
+
+Credenciais padrão:
+
+- **Usuário:** admin
+- **Senha:** admin123
+
+Este usuário possui perfil de **administrador**.
+--- 
+
 ## 6. Referências
 * Node.js Documentation – https://nodejs.org
 * Express Documentation – https://expressjs.com
