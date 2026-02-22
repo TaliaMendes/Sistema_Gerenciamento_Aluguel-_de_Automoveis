@@ -143,7 +143,6 @@ npm run dev
 ```sh
 http://localhost:5173
 ```
-
 ---
 
 ## ⚠️ Observação
@@ -156,6 +155,7 @@ Credenciais padrão:
 - **Senha:** admin123
 
 Este usuário possui perfil de **administrador**.
+
 --- 
 
 ## 6. Referências
