@@ -26,7 +26,7 @@ export function registrarMulta({ reserva_id, descricao, valor }) {
   const descValidada = validarTexto('descricao', descricao);
   const valorValidado = validarValor(valor);
 
-  const reserva = MultaRepository.buscarPorId(reservaId);
+  const reserva = ReservaRepository.buscarPorId(reservaId);
   if (!reserva) throw new Error('Reserva não encontrada.');
 
   const id = MultaRepository.criarMulta({
