@@ -57,7 +57,7 @@ export function Veiculos() {
     <div className="veiculos-container">
       <div className="content-wrapper">
         <header className="veiculos-header">
-          <h1>RunCar - Veículos Disponíveis</h1>
+          <h1><Link to="/" className="home-link">RunCar</Link> - Veículos Disponíveis</h1>
           <div className="user-info">
             {isAuthenticated ? (
               <>
