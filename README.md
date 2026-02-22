@@ -144,6 +144,8 @@ npm run dev
 http://localhost:5173
 ```
 
+---
+
 ## ⚠️ Observação
 
 O usuário administrador já é criado automaticamente ao iniciar a aplicação.
@@ -160,5 +162,4 @@ Este usuário possui perfil de **administrador**.
 * Node.js Documentation – https://nodejs.org
 * Express Documentation – https://expressjs.com
 * React Documentation – https://react.dev
-* 
 ---
