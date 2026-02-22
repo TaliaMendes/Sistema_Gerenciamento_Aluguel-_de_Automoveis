@@ -33,18 +33,23 @@ export function MinhasReservas() {
     }
   };
 
-  const handleCancelar = async (reservaId) => {
-    if (!window.confirm('Tem certeza que deseja cancelar esta reserva?')) {
-      return;
-    }
 
-    try {
-      await reservaService.cancelar(reservaId);
-      carregarDados();
-    } catch (err) {
-      console.log('Erro ao cancelar reserva:', err);
-    }
-  };
+  console.log(reservas);
+
+  const handleCancelar = async (reservaId, pagamentoStatus) => {
+  const msg = pagamentoStatus === 'PAGO'
+    ? 'Esta reserva já foi paga. Deseja cancelar mesmo assim? O reembolso será processado.'
+    : 'Tem certeza que deseja cancelar esta reserva?';
+
+  if (!window.confirm(msg)) return;
+
+  try {
+    await reservaService.cancelar(reservaId);
+    carregarDados();
+  } catch (err) {
+    console.log('Erro ao cancelar reserva:', err);
+  }
+};
 
   const handleLogout = () => {
     logout();
@@ -185,33 +190,33 @@ export function MinhasReservas() {
               </div>
 
               {reserva.status === 'RESERVADA' && (
-              <div className="reserva-actions">
-                {reserva.pagamento_status === 'PENDENTE' && (
-                  <button
-                    onClick={() => navigate(`/pagamento/${reserva.id}`)}
-                    className="btn-primary btn-sm"
-                  >
-                    Pagar
-                  </button>
-                )}
+                <div className="reserva-actions">
+                  {reserva.pagamento_status === 'PENDENTE' && (
+                    <button
+                      onClick={() => navigate(`/pagamento/${reserva.id}`)}
+                      className="btn-primary btn-sm"
+                    >
+                      Pagar
+                    </button>
+                  )}
 
-                <button
-                  onClick={() => handleCancelar(reserva.id)}
-                  className="btn-danger btn-sm"
-                >
-                  Cancelar
-                </button>
-
-                {reserva.pagamento_status === 'PAGO' && (
-                  <button
-                    onClick={() => handleFinalizar(reserva.id)}
-                    className="btn-success btn-sm"
-                  >
-                    Finalizar
-                  </button>
-                )}
-              </div>
-            )}
+                  {(reserva.data_inicio) > new Date() ? (
+                    <button
+                      onClick={() => handleCancelar(reserva.id, reserva.pagamento_status)}
+                      className="btn-danger btn-sm"
+                    >
+                      Cancelar
+                    </button>
+                  ) : reserva.pagamento_status === 'PAGO' && (
+                    <button
+                      onClick={() => handleFinalizar(reserva.id)}
+                      className="btn-success btn-sm"
+                    >
+                      Finalizar
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
